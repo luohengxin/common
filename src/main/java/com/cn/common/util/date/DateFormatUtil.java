@@ -10,6 +10,10 @@ import java.util.Map;
 public class DateFormatUtil {
 
 
+    public static final String Y_M_D1 = "yyyy-MM-dd";
+
+    public static final String Y_M_D2 = "yyyy/MM/dd";
+
     private final static Object LOCK = new Object();
 
 
