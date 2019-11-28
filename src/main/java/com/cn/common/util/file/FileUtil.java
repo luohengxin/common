@@ -30,8 +30,20 @@ public class FileUtil {
     }
 
 
+    public static boolean move(File source,String target){
+
+        CheckUtil.check(null == source, new FileOperationException("源文件为null"));
+        CheckUtil.check(!source.exists(), new FileOperationException("源文件不存在"));
+        CheckUtil.check(StringUtils.isEmpty(target), new FileOperationException("目标地址不能为空"));
+        File file = new File(target);
+        CheckUtil.check(file.exists(), new FileOperationException("目标地址已存在文件不能移动"));
+        return source.renameTo(file);
+
+    }
+
+
     public static void main(String[] args) {
-        copy(new File("E:\\图片\\证件照.png"), "E:\\图片\\jj.png");
+        move(new File("E:\\图片\\证件照.png"), "E:\\图片\\jj.png");
     }
 
 
