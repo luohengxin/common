@@ -1,6 +1,8 @@
 package com.cn.common.util.bean;
 
 import com.cn.common.util.date.DateFormatUtil;
+import com.cn.common.util.exception.ApplicationException;
+import com.cn.common.util.exception.BeanConvertException;
 import net.sf.cglib.beans.BeanCopier;
 import net.sf.cglib.core.Converter;
 
@@ -11,13 +13,18 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 
 /**
  * cglib 类型转换工具
  */
 public class BeanConvert {
+
+
+    public static final Map<Class,FieldConverter> converterCache = new HashMap<>();
 
     public static void transfer(Object source,Object target,boolean defaultConverter){
 
@@ -47,6 +54,7 @@ public class BeanConvert {
                 FieldMapping annotation = field.getAnnotation(FieldMapping.class);
                 if(null != annotation){
                     String value = annotation.value();
+                    Class fieldConverterClass = annotation.fieldConverter();
                     if("".equals(value)){
                         continue;
                     }
@@ -55,14 +63,35 @@ public class BeanConvert {
                         sField.setAccessible(true);
                         Object o = sField.get(source);
                         field.setAccessible(true);
-                        if(null != converter){
-                            Object convert = converter.convert(o, field.getType(), null);
-                            field.set(target,convert);
-                        }else {
-                            field.set(target,o);
+                        if(fieldConverterClass == Void.class){
+                            if(null != converter){
+                                Object convert = converter.convert(o, field.getType(), null);
+                                field.set(target,convert);
+                            }else {
+                                field.set(target,o);
+                            }
+                        }else{
+                            if(FieldConverter.class.isAssignableFrom(fieldConverterClass)){
+                                FieldConverter fieldConverter = converterCache.get(fieldConverterClass);
+                                if(null == fieldConverter){
+                                    synchronized (fieldConverterClass){
+                                        fieldConverter = converterCache.get(fieldConverterClass);
+                                        if(null == fieldConverter){
+                                            fieldConverter = (FieldConverter) fieldConverterClass.newInstance();
+                                        }
+                                    }
+                                }
+
+                                Object convert = fieldConverter.convert(o);
+                                field.set(target,convert);
+                            }else{
+                                throw new ApplicationException(fieldConverterClass.getName() +"未实现FieldConverter");
+                            }
                         }
                     } catch (NoSuchFieldException | IllegalAccessException e) {
-                        e.printStackTrace();
+                        throw new BeanConvertException("字段填充失败",e);
+                    } catch (InstantiationException e) {
+                        throw new BeanConvertException(e);
                     }
                 }
             }
@@ -113,6 +142,14 @@ public class BeanConvert {
     public @interface FieldMapping{
 
         String value() default "";
+
+        Class fieldConverter() default Void.class;
+    }
+
+    public interface FieldConverter<S,T>{
+
+        T convert(S s);
+
     }
 
 }

@@ -1,6 +1,7 @@
 package com.cn.common.util.bean.entity;
 
 import com.cn.common.util.bean.BeanConvert;
+import com.cn.common.util.bean.converter.ManConverter;
 
 import java.util.Date;
 
@@ -12,7 +13,8 @@ public class UserVO {
     @BeanConvert.FieldMapping("name")
     private String name2;
 
-    private String sex2;
+    @BeanConvert.FieldMapping(value = "sex",fieldConverter = ManConverter.class)
+    private String isMan;
 
     private int age;
 
@@ -25,7 +27,7 @@ public class UserVO {
         return "UserVO{" +
                 "id=" + id +
                 ", name2='" + name2 + '\'' +
-                ", sex2='" + sex2 + '\'' +
+                ", isMan='" + isMan + '\'' +
                 ", age=" + age +
                 ", birthday2='" + birthday2 + '\'' +
                 '}';
@@ -50,12 +52,12 @@ public class UserVO {
         this.name2 = name2;
     }
 
-    public String getSex2() {
-        return sex2;
+    public String getIsMan() {
+        return isMan;
     }
 
-    public void setSex2(String sex2) {
-        this.sex2 = sex2;
+    public void setIsMan(String isMan) {
+        this.isMan = isMan;
     }
 
     public int getAge() {
@@ -64,5 +66,13 @@ public class UserVO {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public String getBirthday2() {
+        return birthday2;
+    }
+
+    public void setBirthday2(String birthday2) {
+        this.birthday2 = birthday2;
     }
 }

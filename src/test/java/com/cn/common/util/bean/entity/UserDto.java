@@ -8,13 +8,13 @@ public class UserDto {
 
     private String name;
 
-    private String sex;
+    private int sex;
 
     private int age;
 
     private Date birthday;
 
-    public UserDto(int id, String name, String sex, int age,Date birthday) {
+    public UserDto(int id, String name, int sex, int age,Date birthday) {
         this.id = id;
         this.name = name;
         this.sex = sex;
@@ -38,12 +38,20 @@ public class UserDto {
         this.name = name;
     }
 
-    public String getSex() {
+    public int getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(int sex) {
         this.sex = sex;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
     public int getAge() {
