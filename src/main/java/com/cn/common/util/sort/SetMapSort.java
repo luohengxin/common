@@ -13,7 +13,7 @@ public class SetMapSort<V extends SetMapSort.Sortable> {
     public SetMapSort(Collection<V> source, Comparator<V> comparable) {
         if (null == source) throw new ApplicationException("source collection is null");
 
-        this.set = new TreeSet<V>(comparable);
+        this.set = new TreeSet<>(comparable);
         Iterator<V> iterator = source.iterator();
         while (iterator.hasNext()) {
             V next = iterator.next();
@@ -44,7 +44,7 @@ public class SetMapSort<V extends SetMapSort.Sortable> {
         }
     }
 
-    public void transfor(Collection<V> c) {
+    public void transfer(Collection<V> c) {
         if (null == c) throw new ApplicationException("target collection is null");
         Iterator<V> iterator = this.set.iterator();
         while (iterator.hasNext()) {

@@ -21,7 +21,7 @@ public class SortTest {
             System.out.println(o);
         });
         List<User> to = new ArrayList<>();
-        userSetMapSort.transfor(to);
+        userSetMapSort.transfer(to);
         System.out.println(to);
 
     }
