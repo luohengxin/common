@@ -2,10 +2,7 @@ package com.cn.common.mvc.http;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.cglib.proxy.CallbackFilter;
-import org.springframework.cglib.proxy.Enhancer;
-import org.springframework.cglib.proxy.MethodInterceptor;
-import org.springframework.cglib.proxy.MethodProxy;
+import org.springframework.cglib.proxy.*;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -64,12 +61,12 @@ public class ControllerBeanPostProcessor implements BeanPostProcessor {
     private Object createProxy(Class<?> beanClass, Object bean, List<Method> methods) {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(beanClass);
-        enhancer.setCallbacks(new MethodInterceptor[]{new DefaultInterceptor(bean), new ControllerMethodInterceptor(bean)});
+        enhancer.setCallbacks(new Callback[]{NoOp.INSTANCE, new ControllerMethodInterceptor(bean)});
         enhancer.setCallbackFilter(new ControllerMethodFilter(methods));
         return enhancer.create();
     }
 
-    public class ControllerMethodInterceptor implements MethodInterceptor {
+    protected class ControllerMethodInterceptor implements MethodInterceptor {
 
         private Object target;
 
@@ -110,19 +107,6 @@ public class ControllerBeanPostProcessor implements BeanPostProcessor {
         }
     }
 
-    public class DefaultInterceptor implements MethodInterceptor {
-        private Object target;
-
-        public DefaultInterceptor(Object target) {
-            this.target = target;
-        }
-
-        @Override
-        public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-            return method.invoke(target, objects);
-
-        }
-    }
 
     public class ControllerMethodFilter implements CallbackFilter {
 
