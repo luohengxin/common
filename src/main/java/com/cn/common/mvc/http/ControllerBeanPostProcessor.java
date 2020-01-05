@@ -44,7 +44,7 @@ public class ControllerBeanPostProcessor implements BeanPostProcessor {
         List<Method> needProxyMethods = new ArrayList<>();
         for (Method method : methods) {
             MethodLog annotation1 = method.getAnnotation(MethodLog.class);
-            if (Objects.nonNull(annotation1)) {
+            if (Objects.nonNull(annotation1) && (annotation1.before() || annotation1.after())) {
                 needProxyMethods.add(method);
             }
         }
