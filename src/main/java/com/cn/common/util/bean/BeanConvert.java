@@ -1,8 +1,8 @@
 package com.cn.common.util.bean;
 
+import com.cn.common.util.exception.BeanConvertException;
 import com.cn.common.util.date.DateFormatUtil;
 import com.cn.common.util.exception.ApplicationException;
-import com.cn.common.util.exception.BeanConvertException;
 import net.sf.cglib.beans.BeanCopier;
 import net.sf.cglib.core.Converter;
 

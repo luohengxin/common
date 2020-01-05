@@ -1,9 +1,7 @@
 package com.cn.common.util.bean.entity;
 
-import com.cn.common.util.bean.BeanConvert;
 import com.cn.common.util.bean.converter.ManConverter;
-
-import java.util.Date;
+import com.cn.common.util.bean.BeanConvert;
 
 @BeanConvert.NeedMapper
 public class UserVO {
