@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-@Component
+//@Component
 public class ControllerBeanPostProcessor implements BeanPostProcessor {
 
 
@@ -53,8 +53,9 @@ public class ControllerBeanPostProcessor implements BeanPostProcessor {
 
 
     private boolean isHandler(Class<?> beanType) {
-        return (AnnotatedElementUtils.hasAnnotation(beanType, Controller.class) ||
-                AnnotatedElementUtils.hasAnnotation(beanType, RequestMapping.class));
+        Controller mergedAnnotation = AnnotatedElementUtils.findMergedAnnotation(beanType, Controller.class);
+
+        return Objects.nonNull(mergedAnnotation);
     }
 
 
